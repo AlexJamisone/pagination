@@ -1,3 +1,4 @@
+"use client";
 import LinkButton from "@/components/LinkButton";
 import { usePathname, useSearchParams } from "next/navigation";
 
