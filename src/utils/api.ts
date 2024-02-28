@@ -1,11 +1,9 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import md5 from "crypto-js/md5";
 import { isNumber } from "./isNumber";
 import { uniq } from "./uniq";
 import axiosRetry from "axios-retry";
 import { compareArrays } from "./compareArrays";
-import { throws } from "assert";
-import { error } from "console";
 type ResponseResult = {
   result: string[];
 };
@@ -174,7 +172,7 @@ export async function getProducts({
         )) ?? [];
     }
     ids = compareArrays(productIds, priceIds, brandsIds);
-    if (ids.length === 0) {
+    if (ids.length === 0 && !product && !price && brands.length === 0) {
       total = (await getInitialTotalPage()) ?? 0;
       ids = (await getIds(offset, limit)) ?? [];
     }
@@ -192,6 +190,5 @@ export async function getProducts({
     };
   } catch (err) {
     console.log(err);
-    console.log("i am in error");
   }
 }

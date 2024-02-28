@@ -7,6 +7,7 @@ type CheckboxProps = {
   brand: string;
 };
 const Checkbox = ({ brand }: CheckboxProps) => {
+  //think about it
   const searchParam = useSearchParams();
   const pathname = usePathname();
   const brands = searchParam.getAll("brend");
@@ -16,15 +17,16 @@ const Checkbox = ({ brand }: CheckboxProps) => {
     if (isChecked) {
       params.append("brend", brand);
     } else {
-      params.delete("brend", brand);
+      params.delete("brend");
     }
     replace(`${pathname}?${params.toString()}`);
-  }, 600);
+  }, 200);
   return (
     <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
       <div className="flex items-center ps-3">
         <input
           id={brand}
+          name={brand}
           type="checkbox"
           onChange={(e) => handlCheck(e.target.checked)}
           defaultChecked={brands.includes(brand)}

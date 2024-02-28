@@ -15,12 +15,10 @@ export default function Home({
     product?: string;
     page?: string;
     brend?: string[];
-    searchBrend?: string;
     price?: string;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
-  const searchBrend = searchParams?.searchBrend || "";
   const brend = searchParams?.brend || [];
   const product = searchParams?.product || "";
   const price = searchParams?.price || "";
@@ -38,8 +36,8 @@ export default function Home({
             <FildsFilte />
             <div className="flex flex-col gap-2 justify-start h-fit p-5 rounded-lg shadow-lg">
               <BrandsFilter />
-              <Suspense key={searchBrend} fallback={<Spinner />}>
-                <Brands searchBrend={searchBrend} />
+              <Suspense fallback={<Spinner />}>
+                <Brands />
               </Suspense>
             </div>
           </div>
