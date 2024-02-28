@@ -2,6 +2,7 @@ import axios from "axios";
 import md5 from "crypto-js/md5";
 import { isNumber } from "./isNumber";
 import { uniq } from "./uniq";
+import axiosRetry from "axios-retry";
 type ResponseResult = {
   result: string[];
 };
@@ -18,7 +19,7 @@ type Product = {
   brand: string | null;
 };
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: "https://api.valantis.store:41000/",
   headers: {
     "Content-Type": "application/json",
@@ -27,6 +28,8 @@ export const api = axios.create({
     ).toString(),
   },
 });
+axiosRetry(api, { retries: 3 });
+
 async function getProductIdsByName(
   product: string,
 ): Promise<string[] | undefined> {
@@ -137,6 +140,7 @@ export async function getProducts({
       ids = (await getProductIdsByBrands(brands)) ?? [];
     }
     if (ids.length === 0) {
+      console.log("up here");
       total = (await getInitialTotalPage()) ?? 0;
       ids = (await getIds(offset, limit)) ?? [];
     }

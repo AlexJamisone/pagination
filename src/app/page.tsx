@@ -21,7 +21,7 @@ export default function Home({
       </header>
       <main className="w-full flex justify-center gap-7 mx-auto">
         <div className="flex flex-col">
-          <Suspense>
+          <Suspense fallback="Loading...">
             <Tabel currentPage={currentPage} />
           </Suspense>
         </div>
