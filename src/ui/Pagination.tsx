@@ -25,57 +25,65 @@ const Pagination = ({ total }: { total: number }) => {
     : isLastPage || isSecondFromLast
       ? [currentPage - 2, currentPage - 1, currentPage]
       : [currentPage - 1, currentPage, currentPage + 1];
-
   return (
-    <nav aria-label="Page navigation" className="flex justify-center m-5 p-3">
-      {currentPage <= total ? (
-        <ul className="inline-flex -space-x-px text-sm">
-          {!isFirstPage && (
-            <li>
-              <LinkButton href={`${pathname}?page=${currentPage - 1}`}>
-                Previos
+    <>
+      {total !== 1 && (
+        <nav
+          aria-label="Page navigation"
+          className="flex justify-center m-5 p-3"
+        >
+          {currentPage <= total ? (
+            <ul className="inline-flex -space-x-px text-sm">
+              {!isFirstPage && (
+                <li>
+                  <LinkButton href={`${pathname}?page=${currentPage - 1}`}>
+                    Previos
+                  </LinkButton>
+                </li>
+              )}
+              {navigation.map((item) => (
+                <li key={item}>
+                  <LinkButton
+                    isActive={item === currentPage}
+                    href={createPageUrl(item)}
+                  >
+                    {item}
+                  </LinkButton>
+                </li>
+              ))}
+              {!isTherdFromLast && !isLastPage && (
+                <li>
+                  <LinkButton href="#" styles="select-none pointer-events-none">
+                    ...
+                  </LinkButton>
+                </li>
+              )}
+              {currentPage !== total && (
+                <li>
+                  <LinkButton href={createPageUrl(total)}>{total}</LinkButton>
+                </li>
+              )}
+              {!isLastPage && (
+                <li>
+                  <LinkButton href={`${pathname}?page=${currentPage + 1}`}>
+                    Next
+                  </LinkButton>
+                </li>
+              )}
+            </ul>
+          ) : (
+            <div className="flex flex-col gap-5">
+              <LinkButton href="/?page=1">
+                Вернуться к первой странице
               </LinkButton>
-            </li>
-          )}
-          {navigation.map((item) => (
-            <li key={item}>
-              <LinkButton
-                isActive={item === currentPage}
-                href={createPageUrl(item)}
-              >
-                {item}
+              <LinkButton href="/?page=1">
+                Вернуться к последней старнице
               </LinkButton>
-            </li>
-          ))}
-          {!isTherdFromLast && !isLastPage && (
-            <li>
-              <LinkButton href="#" styles="select-none pointer-events-none">
-                ...
-              </LinkButton>
-            </li>
+            </div>
           )}
-          {currentPage !== total && (
-            <li>
-              <LinkButton href={createPageUrl(total)}>{total}</LinkButton>
-            </li>
-          )}
-          {!isLastPage && (
-            <li>
-              <LinkButton href={`${pathname}?page=${currentPage + 1}`}>
-                Next
-              </LinkButton>
-            </li>
-          )}
-        </ul>
-      ) : (
-        <div className="flex flex-col gap-5">
-          <LinkButton href="/?page=1">Вернуться к первой странице</LinkButton>
-          <LinkButton href="/?page=1">
-            Вернуться к последней старнице
-          </LinkButton>
-        </div>
+        </nav>
       )}
-    </nav>
+    </>
   );
 };
 export default Pagination;

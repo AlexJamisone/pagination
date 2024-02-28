@@ -1,18 +1,20 @@
-import Skeleton from "@/components/Skeleton";
 import Pagination from "./Pagination";
 import { getProducts } from "@/utils/api";
 type TabelProps = {
   currentPage: number;
+  brands: string[];
+  product: string;
+  price: string;
 };
-const Tabel = async ({ currentPage }: TabelProps) => {
+const Tabel = async ({ currentPage, product, price, brands }: TabelProps) => {
   const items = await getProducts({
     currentPage,
-    product: "",
-    price: "",
-    brands: [],
+    product,
+    price,
+    brands,
   });
   return (
-    <>
+    <div>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -50,11 +52,7 @@ const Tabel = async ({ currentPage }: TabelProps) => {
         </tbody>
       </table>
       <Pagination total={items?.totalPage ?? 0} />
-    </>
+    </div>
   );
 };
 export default Tabel;
-// {isLoading && ( <tr> <td colSpan={4} className="text-center p-5"> <Skeleton line={6} />
-//         </td>
-//         </tr>
-//         )}

@@ -3,6 +3,7 @@ import md5 from "crypto-js/md5";
 import { isNumber } from "./isNumber";
 import { uniq } from "./uniq";
 import axiosRetry from "axios-retry";
+import { compareArrays } from "./compareArrays";
 type ResponseResult = {
   result: string[];
 };
@@ -24,11 +25,16 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     "X-Auth": md5(
-      `${process.env.PASS}_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`,
+      `${process.env.NEXT_PUBLIC_PASS}_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`,
     ).toString(),
   },
 });
-axiosRetry(api, { retries: 3 });
+axiosRetry(api, {
+  retries: 5,
+  retryDelay: (count) => {
+    return count * 1000;
+  },
+});
 
 async function getProductIdsByName(
   product: string,
@@ -118,6 +124,18 @@ async function getProductByIds(ids: string[]) {
     console.log(err);
   }
 }
+export async function getAllBrands(): Promise<string[] | undefined> {
+  try {
+    const response = await api.post<ResponseResult>("", {
+      action: "get_fields",
+      params: { field: "brand" },
+    });
+    const brands = uniq(response.data.result, (brend) => brend);
+    return brands;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export async function getProducts({
   product,
@@ -126,26 +144,37 @@ export async function getProducts({
   currentPage,
 }: ReqProduct) {
   try {
+    let products: Product[] = [];
     let ids: string[] = [];
     let total: number = 0;
     const limit = 50;
     const offset = (currentPage - 1) * limit;
+    let productIds: string[] = [];
+    let priceIds: string[] = [];
+    let brandsIds: string[] = [];
+
     if (product) {
-      ids = (await getProductIdsByName(product)) ?? [];
+      productIds = (await getProductIdsByName(product)) ?? [];
     }
     if (price && isNumber(price)) {
-      ids = (await getProductIdsByPrice(+price)) ?? [];
+      priceIds = (await getProductIdsByPrice(+price)) ?? [];
     }
     if (brands.length !== 0) {
-      ids = (await getProductIdsByBrands(brands)) ?? [];
+      brandsIds = (await getProductIdsByBrands(brands)) ?? [];
     }
+    ids = compareArrays(productIds, priceIds, brandsIds);
     if (ids.length === 0) {
-      console.log("up here");
       total = (await getInitialTotalPage()) ?? 0;
       ids = (await getIds(offset, limit)) ?? [];
     }
     const response = await getProductByIds(ids);
-    const products = uniq(response ?? [], (item) => item.id);
+    products = uniq(response ?? [], (item) => item.id);
+    if (total === 0) {
+      total = Math.ceil(products.length / limit);
+      const endIndex: number = Math.min(offset + limit - 1, total - 1);
+      products =
+        products.length > limit ? products.slice(offset, endIndex) : products;
+    }
     return {
       products,
       totalPage: total,

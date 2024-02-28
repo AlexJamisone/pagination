@@ -1,37 +1,41 @@
+"use client";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { HTMLInputTypeAttribute } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 type SearchProps = {
-  value?: string | number;
   placeholder?: string;
-  action?: (value: string) => void;
   label: string;
   icon?: boolean;
   type?: HTMLInputTypeAttribute;
+  keyOfSearch: "brand" | "product" | "price" | "searchBrend";
+  debounce?: number;
 };
 const Search = ({
-  value,
-  action,
   icon,
   placeholder,
   type,
   label,
+  keyOfSearch,
+  debounce
 }: SearchProps) => {
   const searchParam = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+
   const handlSearch = useDebouncedCallback((search: string) => {
     const params = new URLSearchParams(searchParam);
-    params.set("page", "1");
+    if (keyOfSearch === ("product" || "price")) {
+      params.set("page", "1");
+    }
     if (search) {
-      params.set("product", search);
+      params.set(keyOfSearch, search);
     } else {
-      params.delete("product");
+      params.delete(keyOfSearch);
     }
     replace(`${pathname}?${params.toString()}`);
-  }, 1500);
+  }, debounce);
 
   return (
     <div className="">
@@ -63,17 +67,8 @@ const Search = ({
           id="input-group-search"
           className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:outline-sky-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${icon && "ps-10"} p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
           placeholder={placeholder}
-          onChange={(e) => {
-            if (!action) {
-              handlSearch(e.target.value);
-              return;
-            }
-            action(e.target.value);
-          }}
-          value={!action ? undefined : value}
-          defaultValue={
-            !action ? searchParam.get("product")?.toString() : undefined
-          }
+          onChange={(e) => handlSearch(e.target.value)}
+          defaultValue={searchParam.get(keyOfSearch)?.toString()}
         />
       </div>
     </div>

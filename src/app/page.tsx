@@ -1,4 +1,9 @@
+import Skeleton from "@/components/Skeleton";
+import Spinner from "@/components/Spinner";
 import Tabel from "@/ui/Tabel";
+import Brands from "@/ui/filters/Brands";
+import BrandsFilter from "@/ui/filters/BrandsFilter";
+import FildsFilte from "@/ui/filters/FildsFilte";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -7,11 +12,19 @@ export default function Home({
   searchParams,
 }: {
   searchParams?: {
-    query?: string;
+    product?: string;
     page?: string;
+    brend?: string[];
+    searchBrend?: string;
+    price?: string;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
+  const searchBrend = searchParams?.searchBrend || "";
+  const brend = searchParams?.brend || [];
+  const product = searchParams?.product || "";
+  const price = searchParams?.price || "";
+
   return (
     <>
       <header className="flex justify-center">
@@ -20,9 +33,26 @@ export default function Home({
         </Link>
       </header>
       <main className="w-full flex justify-center gap-7 mx-auto">
-        <div className="flex flex-col">
-          <Suspense fallback="Loading...">
-            <Tabel currentPage={currentPage} />
+        <div className="flex gap-7 mx-5">
+          <div className="flex flex-col">
+            <FildsFilte />
+            <div className="flex flex-col gap-2 justify-start h-fit p-5 rounded-lg shadow-lg">
+              <BrandsFilter />
+              <Suspense key={searchBrend} fallback={<Spinner />}>
+                <Brands searchBrend={searchBrend} />
+              </Suspense>
+            </div>
+          </div>
+          <Suspense
+            key={`${currentPage + product + price + brend}`}
+            fallback={<Skeleton line={50} />}
+          >
+            <Tabel
+              currentPage={currentPage}
+              brands={brend}
+              product={product}
+              price={price}
+            />
           </Suspense>
         </div>
       </main>

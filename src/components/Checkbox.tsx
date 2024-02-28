@@ -1,5 +1,7 @@
+"use client";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 
 type CheckboxProps = {
   brand: string;
@@ -8,15 +10,15 @@ const Checkbox = ({ brand }: CheckboxProps) => {
   const searchParam = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const handlCheck = (isChecked: boolean) => {
+  const handlCheck = useDebouncedCallback((isChecked: boolean) => {
     const params = new URLSearchParams(searchParam);
     if (isChecked) {
       params.append("brend", brand);
     } else {
       params.delete("brend", brand);
     }
-    replace(`${pathname}?${params.toString()}`, undefined, { shallow: true });
-  };
+    replace(`${pathname}?${params.toString()}`);
+  }, 500);
   return (
     <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
       <div className="flex items-center ps-3">
