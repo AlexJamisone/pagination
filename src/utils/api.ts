@@ -155,7 +155,6 @@ export async function getProducts({
 
     if (product) {
       productIds = (await getProductIdsByName(product)) ?? [];
-      console.log(productIds);
     }
     if (price && isNumber(price)) {
       priceIds = (await getProductIdsByPrice(+price)) ?? [];

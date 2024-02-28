@@ -7,7 +7,6 @@ export function compareArrays(
   if (arr1.length === 0 && arr2.length === 0 && arr3.length === 0) {
     return [];
   }
-  console.log(console.log(arr3));
   // Если два из трех массивов пустые, вернуть не пустой
   if (
     (arr1.length === 0 && arr2.length === 0) ||
