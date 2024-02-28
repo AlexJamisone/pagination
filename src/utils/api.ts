@@ -155,12 +155,16 @@ export async function getProducts({
 
     if (product) {
       productIds = (await getProductIdsByName(product)) ?? [];
+      console.log(productIds);
     }
     if (price && isNumber(price)) {
       priceIds = (await getProductIdsByPrice(+price)) ?? [];
     }
     if (brands.length !== 0) {
-      brandsIds = (await getProductIdsByBrands(brands)) ?? [];
+      brandsIds =
+        (await getProductIdsByBrands(
+          typeof brands === "string" ? [brands] : brands,
+        )) ?? [];
     }
     ids = compareArrays(productIds, priceIds, brandsIds);
     if (ids.length === 0) {
