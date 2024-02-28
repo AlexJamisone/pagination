@@ -1,9 +1,11 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import md5 from "crypto-js/md5";
 import { isNumber } from "./isNumber";
 import { uniq } from "./uniq";
 import axiosRetry from "axios-retry";
 import { compareArrays } from "./compareArrays";
+import { throws } from "assert";
+import { error } from "console";
 type ResponseResult = {
   result: string[];
 };
@@ -33,6 +35,12 @@ axiosRetry(api, {
   retries: 5,
   retryDelay: (count) => {
     return count * 1000;
+  },
+  retryCondition: () => true,
+  onRetry: (count, err) => {
+    console.log(
+      `Error code ${err.code}: ${err.message} on retry ${count} status: ${err.status}`,
+    );
   },
 });
 
@@ -184,5 +192,6 @@ export async function getProducts({
     };
   } catch (err) {
     console.log(err);
+    console.log("i am in error");
   }
 }
