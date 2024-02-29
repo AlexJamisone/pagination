@@ -23,6 +23,7 @@ const Brands = ({
   const paramsBrands = typeof br === "string" ? [br] : br;
   const [checked, setChecked] = useState<string[]>(paramsBrands);
   if (isLoading) return <Spinner />;
+
   const showingBrands = show ? brands : brands?.slice(0, 7);
 
   const handlCheck = (value: string) => {
@@ -43,12 +44,18 @@ const Brands = ({
         params.append("brand", brand);
       }
     }
+    if (brands.length === 0) {
+      params.delete("brand");
+    }
     return replace(`${pathname}?${params.toString()}`);
   };
   return (
     <div className="flex flex-col gap-3">
       {!diff(paramsBrands, checked) && (
-        <Button addStyle="w-full" onClick={() => applayChecks(checked)}>
+        <Button
+          addStyle="w-full bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+          onClick={() => applayChecks(checked)}
+        >
           Применить
         </Button>
       )}

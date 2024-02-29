@@ -30,7 +30,7 @@ const BrandsFilter = () => {
     : brands;
 
   return (
-    <>
+    <div className="flex flex-col gap-3 p-3 rounded shadow-md">
       <h3 className="mb-1 font-semibold text-gray-900 dark:text-white text-center">
         Бренд
       </h3>
@@ -41,7 +41,7 @@ const BrandsFilter = () => {
         onChange={(value) => handlSearchBrand(value)}
       />
       <Brands isLoading={isLoading} brands={filteredBrands} search={search} />
-    </>
+    </div>
   );
 };
 export default BrandsFilter;

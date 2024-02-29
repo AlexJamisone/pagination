@@ -21,7 +21,7 @@ type Product = {
 };
 
 const api = axios.create({
-  baseURL: "https://api.valantis.store:41000/",
+  baseURL: "https://api.valantis.store:41000",
   headers: {
     "Content-Type": "application/json",
     "X-Auth": md5(
@@ -39,6 +39,9 @@ axiosRetry(api, {
     console.log(
       `Error code ${err.code}: ${err.message} on retry ${count} status: ${err.status}`,
     );
+    if (count === 5) {
+      throw new Error(`code ${err.code}: ${err.message} after ${count} retrys`);
+    }
   },
 });
 
@@ -150,7 +153,6 @@ export async function getProducts({
   currentPage,
 }: ReqProduct) {
   try {
-    console.log(brands);
     let products: Product[] = [];
     let ids: string[] = [];
     let total: number = 0;
@@ -188,8 +190,14 @@ export async function getProducts({
     return {
       products,
       totalPage: total,
+      error: null,
     };
   } catch (err) {
     console.log(err);
+    return {
+      product: [],
+      total: 0,
+      error: err,
+    };
   }
 }
