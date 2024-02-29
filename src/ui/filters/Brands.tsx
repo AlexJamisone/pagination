@@ -52,12 +52,7 @@ const Brands = ({
   return (
     <div className="flex flex-col gap-3">
       {!diff(paramsBrands, checked) && (
-        <Button
-          addStyle="w-full bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
-          onClick={() => applayChecks(checked)}
-        >
-          Применить
-        </Button>
+        <Button onClick={() => applayChecks(checked)}>Применить</Button>
       )}
       <ul
         className={`${!show && !search ? "-mb-7" : ""} w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white`}

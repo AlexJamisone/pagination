@@ -35,11 +35,28 @@ const Pagination = ({ total }: { total: number }) => {
           {currentPage <= total ? (
             <ul className="inline-flex -space-x-px text-sm">
               {!isFirstPage && (
-                <li>
-                  <LinkButton href={`${pathname}?page=${currentPage - 1}`}>
-                    Previos
-                  </LinkButton>
-                </li>
+                <>
+                  <li>
+                    <LinkButton href={`${pathname}?page=${currentPage - 1}`}>
+                      Previos
+                    </LinkButton>
+                  </li>
+                  {currentPage !== 2 && (
+                    <>
+                      <li>
+                        <LinkButton href={`${pathname}?page=1`}>1</LinkButton>
+                      </li>
+                      <li>
+                        <LinkButton
+                          href="#"
+                          styles="select-none pointer-events-none"
+                        >
+                          ...
+                        </LinkButton>
+                      </li>
+                    </>
+                  )}
+                </>
               )}
               {navigation.map((item) => (
                 <li key={item}>
