@@ -29,6 +29,7 @@ const api = axios.create({
       `${process.env.NEXT_PUBLIC_PASS}_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`,
     ).toString(),
   },
+  timeout: 9999, // hit free vercel timeout because of Serveless and free account
 });
 axiosRetry(api, {
   retries: 5,
