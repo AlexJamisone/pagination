@@ -1,9 +1,10 @@
 import axios from "axios";
 import md5 from "crypto-js/md5";
-import { isNumber } from "./isNumber";
-import { uniq } from "./uniq";
 import axiosRetry from "axios-retry";
-import { compareArrays } from "./compareArrays";
+import { isNumber } from "@/helpers/isNumber";
+import { uniq } from "@/helpers/uniq";
+import { compareArrays } from "@/helpers/compareArrays";
+
 type ResponseResult = {
   result: string[];
 };

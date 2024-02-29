@@ -2,7 +2,7 @@
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import Spinner from "@/components/Spinner";
-import { diff } from "@/utils/diff";
+import { diff } from "@/helpers/diff";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -35,6 +35,7 @@ const Brands = ({
   };
 
   const applayChecks = (brands: string[]) => {
+    //think about it
     const params = new URLSearchParams(searchParams);
     for (const brand of brands) {
       params.delete("brand");
