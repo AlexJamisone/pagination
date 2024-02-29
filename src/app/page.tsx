@@ -1,7 +1,5 @@
 import Skeleton from "@/components/Skeleton";
-import Spinner from "@/components/Spinner";
 import Tabel from "@/ui/Tabel";
-import Brands from "@/ui/filters/Brands";
 import BrandsFilter from "@/ui/filters/BrandsFilter";
 import FildsFilte from "@/ui/filters/FildsFilte";
 import Image from "next/image";
@@ -14,12 +12,12 @@ export default function Home({
   searchParams?: {
     product?: string;
     page?: string;
-    brend?: string[];
+    brand?: string[];
     price?: string;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
-  const brend = searchParams?.brend || [];
+  const brand = searchParams?.brand || [];
   const product = searchParams?.product || "";
   const price = searchParams?.price || "";
 
@@ -36,18 +34,15 @@ export default function Home({
             <FildsFilte />
             <div className="flex flex-col gap-2 justify-start h-fit p-5 rounded-lg shadow-lg">
               <BrandsFilter />
-              <Suspense fallback={<Spinner />}>
-                <Brands />
-              </Suspense>
             </div>
           </div>
           <Suspense
-            key={`${currentPage + product + price + brend}`}
+            key={`${currentPage + product + price + brand}`}
             fallback={<Skeleton line={50} />}
           >
             <Tabel
               currentPage={currentPage}
-              brands={brend}
+              brands={brand}
               product={product}
               price={price}
             />

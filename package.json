@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@maskito/kit": "^2.0.2",
+    "@maskito/react": "^2.0.2",
     "@types/crypto-js": "^4.2.2",
     "axios": "^1.6.7",
     "axios-retry": "^4.0.0",

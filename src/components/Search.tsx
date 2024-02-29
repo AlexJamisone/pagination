@@ -3,13 +3,17 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { HTMLInputTypeAttribute } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { useMaskito } from "@maskito/react";
+import maskitoOption from "@/utils/maskitoOption";
 
 type SearchProps = {
   placeholder?: string;
   label: string;
   icon?: boolean;
   type?: HTMLInputTypeAttribute;
-  keyOfSearch: "brand" | "product" | "price" | "searchBrend";
+  keyOfSearch?: "brand" | "product" | "price";
+  onChange?: (value: string) => void;
+  value?: string;
   debounce?: number;
 };
 const Search = ({
@@ -18,23 +22,34 @@ const Search = ({
   type,
   label,
   keyOfSearch,
-  debounce
+  onChange,
+  debounce,
+  value,
 }: SearchProps) => {
   const searchParam = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const maskInputRef = useMaskito({ options: maskitoOption });
 
   const handlSearch = useDebouncedCallback((search: string) => {
-    const params = new URLSearchParams(searchParam);
-    if (keyOfSearch === ("product" || "price")) {
-      params.set("page", "1");
+    if (keyOfSearch) {
+      const params = new URLSearchParams(searchParam);
+      if (keyOfSearch === ("product" || "price")) {
+        params.set("page", "1");
+      }
+      if (keyOfSearch === "price") {
+        search = parseInt(search.replace(/[^\d.]/g, "")).toString();
+        if (isNaN(+search)) {
+          search = "";
+        }
+      }
+      if (search) {
+        params.set(keyOfSearch, search);
+      } else {
+        params.delete(keyOfSearch);
+      }
+      replace(`${pathname}?${params.toString()}`);
     }
-    if (search) {
-      params.set(keyOfSearch, search);
-    } else {
-      params.delete(keyOfSearch);
-    }
-    replace(`${pathname}?${params.toString()}`);
   }, debounce);
 
   return (
@@ -63,12 +78,24 @@ const Search = ({
           )}
         </div>
         <input
+          ref={keyOfSearch === "price" ? maskInputRef : undefined}
           type={type}
           id="input-group-search"
           className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:outline-sky-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${icon && "ps-10"} p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
           placeholder={placeholder}
-          onChange={(e) => handlSearch(e.target.value)}
-          defaultValue={searchParam.get(keyOfSearch)?.toString()}
+          onInput={(e) => handlSearch(e.currentTarget.value)}
+          onChange={(e) => {
+            if (keyOfSearch) {
+              handlSearch(e.target.value);
+            }
+            if (onChange) {
+              onChange(e.target.value);
+            }
+          }}
+          value={value ?? undefined}
+          defaultValue={
+            keyOfSearch ? searchParam.get(keyOfSearch)?.toString() : undefined
+          }
         />
       </div>
     </div>

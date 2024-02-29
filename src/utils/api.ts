@@ -150,6 +150,7 @@ export async function getProducts({
   currentPage,
 }: ReqProduct) {
   try {
+    console.log(brands);
     let products: Product[] = [];
     let ids: string[] = [];
     let total: number = 0;
