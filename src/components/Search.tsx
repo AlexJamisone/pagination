@@ -61,7 +61,7 @@ const Search = ({
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
           {icon && (
             <svg
-              className="w-4 h-4 text-gray-500 dark:text-gray-400"
+              className="w-4 h-4 text-gray-500"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -81,7 +81,7 @@ const Search = ({
           ref={keyOfSearch === "price" ? maskInputRef : undefined}
           type={type}
           id="input-group-search"
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:outline-sky-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${icon && "ps-10"} p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:outline-sky-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${icon && "ps-10"} p-2.5`}
           placeholder={placeholder}
           onInput={(e) => handlSearch(e.currentTarget.value)}
           onChange={(e) => {
