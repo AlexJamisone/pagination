@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
   console.log(`Error: ${error.message}`);
   return (
@@ -43,13 +45,19 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
             можете попробовать обновить страницу
           </p>
         </div>
-        <div className="flex items-center p-6">
+        <div className="flex items-center p-6 flex-col gap-5">
           <button
             onClick={reset}
             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
           >
             Попробовать снова
           </button>
+          <Link
+            href={"/"}
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
+          >
+            Вернуться на главную
+          </Link>
         </div>
       </div>
     </div>

@@ -15,7 +15,8 @@ const Tabel = async ({ currentPage, product, price, brands }: TabelProps) => {
     brands,
   });
   if (items.error) throw new Error(`${items.error}`);
-  if (items.products?.length === 0) return <NoData label="Товары по данному фильтру не найдены" />;
+  if (items.products?.length === 0)
+    return <NoData label="Товары по данному фильтру не найдены" />;
   return (
     <div>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
