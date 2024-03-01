@@ -9,6 +9,7 @@
 - [Next.js/React](https://nextjs.org/) - back/frontend
 - [Tailwindcss](https://tailwindcss.com/) - CSS
 - [Axios](https://axios-http.com/docs/intro) - http request
+- [Postman](https://www.postman.com/) - API test env
 
 ### Как запустить проект локально
 
@@ -43,6 +44,7 @@ src
 ## Roadmap, точки роста
 
 - Мобильная версия
+- Perfomance update
 
 
 

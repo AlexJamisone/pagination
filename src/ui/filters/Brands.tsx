@@ -4,7 +4,7 @@ import Checkbox from "@/components/Checkbox";
 import Spinner from "@/components/Spinner";
 import { diff } from "@/helpers/diff";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 const Brands = ({
   brands,
@@ -22,17 +22,14 @@ const Brands = ({
   const br = searchParams.getAll("brand") ?? [];
   const paramsBrands = typeof br === "string" ? [br] : br;
   const [checked, setChecked] = useState<string[]>(paramsBrands);
-  if (isLoading) return <Spinner />;
-
   const showingBrands = show ? brands : brands?.slice(0, 7);
-
-  const handlCheck = (value: string) => {
-    setChecked(
-      checked.includes(value)
-        ? checked.filter((item) => item !== value)
-        : [...checked, value],
+  const handlCheck = useCallback((value: string) => {
+    setChecked((prevChecked) =>
+      prevChecked.includes(value)
+        ? prevChecked.filter((item) => item !== value)
+        : [...prevChecked, value],
     );
-  };
+  }, []);
 
   const applayChecks = (brands: string[]) => {
     //think about it
@@ -50,9 +47,15 @@ const Brands = ({
     }
     return replace(`${pathname}?${params.toString()}`);
   };
+
+  const shouldRenderApplyButton = useMemo(
+    () => !diff(paramsBrands, checked),
+    [paramsBrands, checked],
+  );
+  if (isLoading) return <Spinner />;
   return (
     <div className="flex flex-col gap-3">
-      {!diff(paramsBrands, checked) && (
+      {shouldRenderApplyButton && (
         <Button onClick={() => applayChecks(checked)}>Применить</Button>
       )}
       <ul

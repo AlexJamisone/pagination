@@ -17,8 +17,8 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="w-6 h-6 fill-gray-50"
             >
               <path d="m8 2 1.88 1.88"></path>

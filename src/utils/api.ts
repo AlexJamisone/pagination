@@ -30,6 +30,7 @@ const api = axios.create({
     ).toString(),
   },
   timeout: 9999, // hit free vercel timeout because of Serveless and free account
+  timeoutErrorMessage: "timeout error more then 10sec Vercel limiting",
 });
 axiosRetry(api, {
   retries: 5,
@@ -196,6 +197,7 @@ export async function getProducts({
     };
   } catch (err) {
     console.log(err);
+    throw new Error("on this");
     return {
       product: [],
       total: 0,
